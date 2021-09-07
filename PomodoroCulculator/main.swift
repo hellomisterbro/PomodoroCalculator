@@ -6,23 +6,29 @@
 //
 
 import Foundation
-//import 
 
 print("Please enter pomodoro duration in minutes:")
 
-
-if let pomodoroDurationString = readLine(),
-   let pomodoroDurationNum = Int(pomodoroDurationString) {
-    let calculator = PomodoroChunkCalculator()
-    if pomodoroDurationNum < calculator.minWholeChunkDuration  {
-        print("Be a nice human. Enter a valid pomodoro duraiton. More then \(calculator.minWholeChunkDuration)")
-        exit(0)
-    }
-    print("\(pomodoroDurationNum) minutes??? Wow, that's lot of work. Good luck!")
-    let pomodoroChunk = calculator.chunk(for: pomodoroDurationNum,
-                                         mode: .normal)
-    print("Optimal time chunk for you is \(pomodoroChunk.pomodoroDuration) minutes with \(pomodoroChunk.breakDuration) break")
-} else {
+guard let pomodoroDurationString = readLine(),
+   let pomodoroDurationNum = Int(pomodoroDurationString)  else {
     print("Be a nice human. Enter a valid pomodoro duraiton.")
+    exit(0)
 }
+
+let calculator = PomodoroChunkCalculator()
+
+//too small message
+if pomodoroDurationNum < calculator.minPomodoroDuration  {
+    print("Be a nice human. Enter a valid pomodoro duraiton. More then \(calculator.minPomodoroDuration)")
+    exit(0)
+}
+
+//another stupid message
+print("\(pomodoroDurationNum) minutes??? Wow, that's lot of work. Good luck!")
+
+
+//real work
+let pomodoroChunk = calculator.chunk(for: pomodoroDurationNum,
+                                     mode: .normal)
+print("Optimal time chunk for you is \(pomodoroChunk.pomodoroDuration) minutes with \(pomodoroChunk.breakDuration) break")
 

@@ -18,10 +18,9 @@ class PomodoroChunkCalculator {
     
     // MARK: Public
     
-    lazy var minWholeChunkDuration: Int  = {
-        let defaultChunkDuration = defaultWholeChunk.pomodoroDuration + defaultWholeChunk.breakDuration
-        return defaultChunkDuration - pomodoroMaxShift - breakMaxShift
-    }()
+    var minPomodoroDuration: Int {
+        return defaultWholeChunk.pomodoroDuration - pomodoroMaxShift
+    }
     
     // MARK: Private
     
@@ -39,6 +38,11 @@ class PomodoroChunkCalculator {
                                  maxChunkBreak - defaultChunkBreak)
         return Int(fabs(breakMaxShift))
     }()
+    
+    private lazy var minWholeChunkDuration: Int  = {
+        let defaultChunkDuration = defaultWholeChunk.pomodoroDuration + defaultWholeChunk.breakDuration
+        return defaultChunkDuration - pomodoroMaxShift - breakMaxShift
+    }()
         
     private lazy var maxWholeChunkDuration: Int = {
         let defaultWholeChunkDuration = defaultWholeChunk.pomodoroDuration + defaultWholeChunk.breakDuration
@@ -50,8 +54,9 @@ class PomodoroChunkCalculator {
         let normalEnergyBreak = { Double(pomodoroDuration - 5) / 4.0 }
         return mode == .low ? lowEnergyBreak() : normalEnergyBreak()
     }
-    
-    private func bestChunk(for wholeChunkDuration: Int, mode: EnergyMode) -> PomodoroChunk {
+
+    //too complicated
+    private func pickMostBalancedPomodoroChunk(for wholeChunkDuration: Int, mode: EnergyMode) -> PomodoroChunk {
         let minPomdoroDuration = defaultWholeChunk.pomodoroDuration - pomodoroMaxShift
         let maxPomodoroDuration = defaultWholeChunk.pomodoroDuration + pomodoroMaxShift
     
@@ -71,19 +76,29 @@ class PomodoroChunkCalculator {
         }
         return bestChunk
     }
-
+    
     func chunk(for workDuration: Int, mode: EnergyMode) -> PomodoroChunk {
-        assert(workDuration >= minWholeChunkDuration)
+        assert(workDuration >= minPomodoroDuration)
+        let range = minWholeChunkDuration...maxWholeChunkDuration
+        let bestPomodoroChunk = pickChunkWithLessTimeLeftover(for: workDuration,
+                                                                  mode: mode,
+                                                                  range: range)
+        return bestPomodoroChunk ?? defaultWholeChunk
+    }
+    
+    private func pickChunkWithLessTimeLeftover(for workDuration: Int,
+                                                   mode: EnergyMode,
+                                                   range: ClosedRange<Int>) -> PomodoroChunk? {
         var bestPomodoroChunk: PomodoroChunk?
         var previousBestReminder = Int.max
         for wholeChunkDuration in minWholeChunkDuration...maxWholeChunkDuration {
-            let pomodoroChunk = bestChunk(for: wholeChunkDuration, mode: mode)
+            let pomodoroChunk = pickMostBalancedPomodoroChunk(for: wholeChunkDuration, mode: mode)
             let reminder = (workDuration + pomodoroChunk.breakDuration) % wholeChunkDuration
             if reminder < previousBestReminder {
                 previousBestReminder = reminder
                 bestPomodoroChunk = pomodoroChunk
             }
         }
-        return bestPomodoroChunk ?? defaultWholeChunk
+        return bestPomodoroChunk
     }
 }
