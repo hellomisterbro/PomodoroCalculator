@@ -11,16 +11,17 @@ import Foundation
 print("Please enter pomodoro duration in minutes:")
 
 
-//расписать самые популярные кейсы
-//написать решение к ним
-// написать алгоритм для всех этих кейсов
-
 if let pomodoroDurationString = readLine(),
    let pomodoroDurationNum = Int(pomodoroDurationString) {
+    let calculator = PomodoroChunkCalculator()
+    if pomodoroDurationNum < calculator.minWholeChunkDuration  {
+        print("Be a nice human. Enter a valid pomodoro duraiton. More then \(calculator.minWholeChunkDuration)")
+        exit(0)
+    }
     print("\(pomodoroDurationNum) minutes??? Wow, that's lot of work. Good luck!")
-    let pomodoroChunk = PomodoroChunkCalculator.chunk(for: pomodoroDurationNum,
-                                                       mode: .normal)
-    print("Optimal time chunk for you is \(pomodoroChunk.duration) minutes with ")
+    let pomodoroChunk = calculator.chunk(for: pomodoroDurationNum,
+                                         mode: .normal)
+    print("Optimal time chunk for you is \(pomodoroChunk.pomodoroDuration) minutes with \(pomodoroChunk.breakDuration) break")
 } else {
     print("Be a nice human. Enter a valid pomodoro duraiton.")
 }
