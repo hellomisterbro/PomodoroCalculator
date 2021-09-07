@@ -32,6 +32,7 @@
 		1C9281FD262EB3980098BA7E /* PomodoroChunkCalculatorTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PomodoroChunkCalculatorTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C9281FF262EB3980098BA7E /* PomodoroChunkCalculatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroChunkCalculatorTest.swift; sourceTree = "<group>"; };
 		1C928201262EB3980098BA7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1CB3D17226E7CE5F0069F224 /* make-visible-in-terminal.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "make-visible-in-terminal.txt"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +76,7 @@
 			children = (
 				1C9281DB262DB3180098BA7E /* main.swift */,
 				1C9281E3262DD8E40098BA7E /* PomodoroChunkCalculator.swift */,
+				1CB3D17226E7CE5F0069F224 /* make-visible-in-terminal.txt */,
 			);
 			path = PomodoroCulculator;
 			sourceTree = "<group>";
